@@ -1,22 +1,45 @@
 import React from "react";
-//import SearchPhotos from "./components/searchPhotos.js.js"
+import SearchAppBar from "./SearchAppBar";
+import Album from "./Album";
+
 const axios = require('axios');
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    //State holds 3 properties
+      //An array of image urls in data
+      //Current search term
+      //What results page is selected
     this.state = {
-      data: 'https://live.staticflickr.com/7372/12502775644_acfd415fa7_w.jpg'
+      data: ['https://live.staticflickr.com/7372/12502775644_acfd415fa7_w.jpg'],
+      searchTerm: 'dog',
+      pageNumber: 1,
     }
+    this.changePictures = this.changePictures.bind(this);
   }
 
   componentDidMount () {
-    axios.get("http://localhost:3000/feed")
+    this.changePictures(this.state.searchTerm, this.state.pageNumber);
+  }
+
+  changePictures (newSearch, newPage) {
+    if(typeof newSearch === "object"){
+      newSearch = this.state.searchTerm;
+    }
+      axios.get("http://localhost:3000/picFetch", {
+        params: {
+          searchTerm: newSearch,
+          pageNumber: newPage
+        }
+      })
       .then((res) => {
-        //console.log("what we got from server", res);
-        let answer = res.data;
+        let imageUrls = res.data;
+        console.log('before setting new state', newSearch, newPage);
         this.setState({
-          data: answer
+          data: imageUrls,
+          searchTerm: newSearch,
+          pageNumber: newPage
         })
       })
       .catch((err) => {
@@ -26,13 +49,9 @@ class App extends React.Component {
 
   render () {
     return (
-    <div className="App">
-      <div className="container">
-        <h1 className="title">Flikr Photo Search</h1>
-        {/* <SearchPhotos /> */}
-      </div>
-      <p></p>
-      <img src={this.state.data}/>
+    <div>
+      <SearchAppBar/>
+      <Album value={this.state.data} handler={this.changePictures}/>
     </div>
     )
   }
