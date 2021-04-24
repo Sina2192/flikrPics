@@ -8,9 +8,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     //State holds 3 properties
-      //An array of image urls in data
-      //Current search term
-      //What results page is selected
+      //data = An array of image urls in data
+      //searchTerm = Current search term, by default we look at dogs
+      //pageNumber = What page is selected
     this.state = {
       data: ['https://live.staticflickr.com/7372/12502775644_acfd415fa7_w.jpg'],
       searchTerm: 'dog',
@@ -24,7 +24,10 @@ class App extends React.Component {
   }
 
   changePictures (newSearch, newPage) {
+    //Check whether we are updating the page or the search
+      //If newSearch is an object, that means we are updating the page only
     if(typeof newSearch === "object"){
+      //So we will need to keep the current search term
       newSearch = this.state.searchTerm;
     }
       axios.get("http://localhost:3000/picFetch", {
@@ -35,7 +38,6 @@ class App extends React.Component {
       })
       .then((res) => {
         let imageUrls = res.data;
-        console.log('before setting new state', newSearch, newPage);
         this.setState({
           data: imageUrls,
           searchTerm: newSearch,

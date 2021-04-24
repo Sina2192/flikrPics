@@ -22,7 +22,7 @@ app.get('/picFetch', (req, res) => {
     imageList = apiResponse.data.photos.photo.map( (node) => {
        //photo id
        let id = node.id;
-       //photo owner - this would be good to expand the project show author info, but not necessary for v1
+       //photo owner - this would be good to expand the project by showing author info, but not necessary for v1
        let owner = node.owner;
        //photo secret
        let secret = node.secret;

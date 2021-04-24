@@ -49,10 +49,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Album(props) {
   const classes = useStyles();
+
+  //Handler is the passed down function which lets us change the search term and page in the parent component
   let handler = props.handler;
-  let currentSearch = props.value.searchTerm;
-  // let pageFlip = props.pageFlip;
   let currentPage = props.value.pageNumber;
+  // Cards is the array of image links
   let cards = props.value;
   return (
     <React.Fragment>
